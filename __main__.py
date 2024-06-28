@@ -80,29 +80,7 @@ lambda_security_group = aws.ec2.SecurityGroup("lambda-security-group",
                                               }],
                                               tags={"Name": "lambda-security-group"})
 
-# Create a Lambda function with a Docker image and launch it in the private subnet
-lambda_function = aws.lambda_.Function("my-lambda-function",
-                                       name="my-lambda-function",
-                                       package_type="Image",
-                                       image_uri=ecr_repo.repository_url.apply(lambda url: f"{url}:latest"),
-                                       role=lambda_role.arn,
-                                       timeout=60,
-                                       memory_size=128,
-                                       vpc_config={
-                                           "subnet_ids": [private_subnet.id],
-                                           "security_group_ids": [lambda_security_group.id],
-                                       },
-                                       environment={
-                                           "variables": {
-                                               "EXAMPLE_ENV_VAR": "example-value"
-                                           }
-                                       },
-                                       tags={
-                                           "Name": "my-lambda-function"
-                                       })
-
 # Export the VPC ID and Subnet ID
 pulumi.export("vpc_id", vpc.id)
 pulumi.export("private_subnet_id", private_subnet.id)
 pulumi.export("ecr_repo_url", ecr_repo.repository_url)
-pulumi.export("lambda_function_arn", lambda_function.arn)
