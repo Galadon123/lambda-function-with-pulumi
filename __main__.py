@@ -69,7 +69,7 @@ lambda_policy = aws.iam.RolePolicy("lambda-policy",
                                        ]
                                    }""")
 
-# Create a security group for Lambda
+# Create a security group for Lambdafaaf
 lambda_security_group = aws.ec2.SecurityGroup("lambda-security-group",
                                               vpc_id=vpc.id,
                                               egress=[{
